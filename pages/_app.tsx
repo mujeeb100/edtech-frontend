@@ -1,7 +1,7 @@
 // export default MyApp;
 import React from 'react';
 import { UserProvider } from '../src/context/useUserStore'; 
-import '../src/app/global.css'; 
+import '../src/app/globals.css'; 
 
 function MyApp({ Component, pageProps }: any) {
   return (
