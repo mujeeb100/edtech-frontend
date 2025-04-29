@@ -11,17 +11,19 @@
 //     email: string;
 //     role: "student" | "professor";
 //   }
-export interface Course {
+export type Course = {
   id: number;
   title: string;
   description: string;
   level: string;
+  professor: string;
 }
 
-export interface User {
+export type User = {
   id: number;
   name: string;
   email: string;
+  role: 'student' | 'professor'; // Add this if not present
 }
 
 export interface Enrollment {

@@ -3,12 +3,13 @@
 import React, { useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { gql, useQuery } from '@apollo/client';
-import { Course } from '../../../types'; // Adjust path
+import { Course, } from '../../../types'; // Adjust path
 import client from '../../../services/apollo'; // Apollo client setup
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { useUserContext } from '@/context/useUserStore';
 
 const GET_COURSE = gql`
   query GetCourse($id: Int!) {
@@ -25,6 +26,7 @@ const CourseDetailsPage = () => {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
+  const { user } = useUserContext();
 
   const courseId = useMemo(() => {
     const parsed = Number(id);
@@ -65,6 +67,8 @@ const CourseDetailsPage = () => {
         </CardHeader> 
         <CardContent>
           <p className="mb-4">{course.description}</p>
+          {/* Conditional Role-based rendering */}
+      {user?.role === 'professor' && <Button>Edit Course</Button>}
           <Button onClick={handleEnroll}>Enroll</Button>
         </CardContent>
       </Card>

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { AlertCircle } from "lucide-react"
+import type { User } from '../../types/index'; // Adjust the import path as needed
 
 const LoginPage = () => {
   const { login, setUser } = useUserContext();
@@ -22,22 +23,22 @@ const LoginPage = () => {
 
     // Mock authentication (replace with your actual authentication logic)
     if (email === 'student@example.com' && password === 'password') {
-      const mockStudentUser = {
+      const mockStudentUser: User = {
         id: 1,
         name: 'Student User',
         email: 'student@example.com',
-        role: 'student', // Add role here
+        role: 'student',
       };
       login(mockStudentUser);
-      setUser(mockStudentUser); // Also set in context
+      setUser(mockStudentUser);
       localStorage.setItem('user', JSON.stringify(mockStudentUser));
-      window.location.href = '/'; // Redirect to home page
+      window.location.href = '/';
     } else if (email === 'professor@example.com' && password === 'password') {
-      const mockProfessorUser = {
+      const mockProfessorUser: User = {
         id: 2,
         name: 'Professor User',
-        email: 'professor@example.com',
-        role: 'professor', // Add role here
+        email: 'professor@example.com', 
+        role: 'professor',
       };
       login(mockProfessorUser);
       setUser(mockProfessorUser);
