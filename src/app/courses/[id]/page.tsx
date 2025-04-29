@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+'use client';
+
+import React, { useMemo } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { gql, useQuery } from '@apollo/client';
-import { Course } from '../../../types'; // Import your Course type
-import client from '../../../services/apollo'; // Import your Apollo Client
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { Course } from '../../../types'; // Adjust path
+import client from '../../../services/apollo'; // Apollo client setup
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const GET_COURSE = gql`
   query GetCourse($id: Int!) {
@@ -21,55 +23,49 @@ const GET_COURSE = gql`
 
 const CourseDetailsPage = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const [courseId, setCourseId] = useState<number | null>(null);
-  const { loading, error, data } = useQuery(GET_COURSE, {
-    client,
-    variables: { id: courseId },
-  });
-  const [course, setCourse] = useState<Course | null>(null);
+  const params = useParams();
+  const id = params?.id;
 
-  useEffect(() => {
-    if (id) {
-      setCourseId(Number(id));
-    }
+  const courseId = useMemo(() => {
+    const parsed = Number(id);
+    return !isNaN(parsed) ? parsed : null;
   }, [id]);
 
-  useEffect(() => {
-    if (data) {
-      setCourse(data.course)
-    }
-  }, [data])
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return (
-    <Alert variant="destructive">
-      <AlertCircle className="h-4 w-4" />
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        {error.message}
-      </AlertDescription>
-    </Alert>
-  )
-
-  if (!course) return null;
+  const { loading, error, data } = useQuery<{ course: Course }>(GET_COURSE, {
+    client,
+    skip: !courseId,
+    variables: { id: courseId as number },
+  });
 
   const handleEnroll = () => {
-    // Implement enrollment logic here (e.g., using a mutation)
-    // For the mock, just redirect to the confirmation page
     router.push('/enrollment/confirmation');
   };
+
+  if (loading) return <p className="p-4 text-gray-600">Loading course details...</p>;
+
+  if (error) {
+    return (
+      <Alert variant="destructive" className="m-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error loading course</AlertTitle>
+        <AlertDescription>{error.message}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  const course = data?.course;
+  if (!course) return <p className="p-4 text-gray-600">Course not found.</p>;
 
   return (
     <div className="container mx-auto p-4">
       <Card>
         <CardHeader>
           <CardTitle>{course.title}</CardTitle>
-          <CardDescription>{course.level}</CardDescription>
-        </CardHeader>
+          <CardDescription className="capitalize">{course.level}</CardDescription>
+        </CardHeader> 
         <CardContent>
-          <p>{course.description}</p>
-          <Button onClick={handleEnroll} className="mt-4">Enroll</Button>
+          <p className="mb-4">{course.description}</p>
+          <Button onClick={handleEnroll}>Enroll</Button>
         </CardContent>
       </Card>
     </div>

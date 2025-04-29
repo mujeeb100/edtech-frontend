@@ -1,7 +1,6 @@
 'use client'
-
 import React, { useState } from 'react';
-import { useUserContext } from '../../context/useUserStore'; // Adjust the path if needed
+import { useUserContext } from '../../context/useUserStore';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -31,9 +30,7 @@ const LoginPage = () => {
       };
       login(mockStudentUser);
       setUser(mockStudentUser); // Also set in context
-      // In a real app, you'd fetch user data (including role) from your backend
-      // and store it here.
-      // For this example, we're just using mock data.
+      localStorage.setItem('user', JSON.stringify(mockStudentUser));
       window.location.href = '/'; // Redirect to home page
     } else if (email === 'professor@example.com' && password === 'password') {
       const mockProfessorUser = {
@@ -44,6 +41,7 @@ const LoginPage = () => {
       };
       login(mockProfessorUser);
       setUser(mockProfessorUser);
+      localStorage.setItem('user', JSON.stringify(mockProfessorUser));
       window.location.href = '/';
     } else {
       setError('Invalid credentials');

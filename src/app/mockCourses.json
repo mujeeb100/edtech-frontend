@@ -1,0 +1,5 @@
+[
+    { "id": 1, "title": "React Basics", "description": "Learn the basics of React", "professorId": "p1" },
+    { "id": 2, "title": "Advanced TypeScript", "description": "Deep dive into TypeScript", "professorId": "p2" }
+  ]
+  

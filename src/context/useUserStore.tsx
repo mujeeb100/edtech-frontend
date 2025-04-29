@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import { User } from '../types'; // Import your User type
+import { User } from '../types/index'; // Import your User type
 
 interface UserContextProps {
   user: User | null;
@@ -8,10 +10,8 @@ interface UserContextProps {
   setUser: (user: User | null) => void;
 }
 
-// Create context
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
-// Create provider
 const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUserState] = useState<User | null>(null);
 
@@ -37,17 +37,20 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     setUserState(null);
     localStorage.removeItem('user');
   };
-
   const setUser = (user: User | null) => {
     setUserState(user);
-  };
+  }
 
   const contextValue = {
     user,
     login,
     logout,
-    setUser,
+    setUser
   };
+
+  if (!contextValue) {
+    throw new Error("useUserContext must be used within a UserProvider");
+  }
 
   return (
     <UserContext.Provider value={contextValue}>
@@ -56,11 +59,12 @@ const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   );
 };
 
-// Create custom hook
+
+
 const useUserContext = () => {
   const context = useContext(UserContext);
   if (!context) {
-    throw new Error('useUserContext must be used within a UserProvider');
+    throw  Error('useUserContext must be used within a UserProvider');
   }
   return context;
 };

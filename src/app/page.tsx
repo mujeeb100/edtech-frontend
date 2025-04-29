@@ -101,3 +101,16 @@ export default function Home() {
     </div>
   );
 }
+// import React from 'react';
+// import { UserProvider } from '../context/useUserStore'; // Adjust the path if needed
+// import '../app/globals.css'; // Import global styles
+
+// function MyApp({ Component, pageProps }: any) {
+//   return (
+//     <UserProvider>
+//       <Component {...pageProps} />
+//     </UserProvider>
+//   );
+// }
+
+// export default MyApp;
