@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <UserProvider> {/* ✅ Wrap everything inside this */}
+        <UserProvider> 
           {children}
         </UserProvider>
       </body>
